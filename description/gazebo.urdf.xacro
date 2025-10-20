@@ -1,0 +1,120 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+    <xacro:macro name="omni_gazebo" params="name">
+        
+        <!-- Gazebo (Ignition) plugin for ROS 2 Control -->
+        <gazebo>
+            <plugin filename="gz_ros2_control-system" name="gz_ros2_control::GazeboSimROS2ControlPlugin">
+                <parameters>$(find omni)/config/omni_wheel_controller.yaml</parameters>
+            </plugin>
+        </gazebo>
+
+        <!-- Chassis appearance in Gazebo -->
+        <gazebo reference="chassis_link">
+            <visual>
+                <material>
+                    <ambient>0.2 0.2 0.8 1</ambient>
+                    <diffuse>0.2 0.2 0.8 1</diffuse>
+                    <specular>0.2 0.2 0.8 1</specular>
+                </material>
+            </visual>
+            <collision>
+                <surface>
+                    <friction>
+                        <ode>
+                            <mu>0.1</mu>
+                            <mu2>0.1</mu2>
+                        </ode>
+                    </friction>
+                </surface>
+            </collision>
+        </gazebo>
+
+        <!-- Wheel 1 -->
+        <gazebo reference="wheel1_link">
+            <visual>
+                <material>
+                    <ambient>0.5 0.5 0.5 1</ambient>
+                    <diffuse>0.5 0.5 0.5 1</diffuse>
+                    <specular>0.5 0.5 0.5 1</specular>
+                </material>
+            </visual>
+            <collision>
+                <surface>
+                    <friction>
+                        <ode>
+                            <mu>1.0</mu>
+                            <mu2>1.0</mu2>
+                        </ode>
+                    </friction>
+                    <contact>
+                        <ode>
+                            <kp>1000000.0</kp>
+                            <kd>100.0</kd>
+                            <min_depth>0.001</min_depth>
+                        </ode>
+                    </contact>
+                </surface>
+            </collision>
+        </gazebo>
+
+        <!-- Wheel 2 -->
+        <gazebo reference="wheel2_link">
+            <visual>
+                <material>
+                    <ambient>0.5 0.5 0.5 1</ambient>
+                    <diffuse>0.5 0.5 0.5 1</diffuse>
+                    <specular>0.5 0.5 0.5 1</specular>
+                </material>
+            </visual>
+            <collision>
+                <surface>
+                    <friction>
+                        <ode>
+                            <mu>1.0</mu>
+                            <mu2>1.0</mu2>
+                        </ode>
+                    </friction>
+                    <contact>
+                        <ode>
+                            <kp>1000000.0</kp>
+                            <kd>100.0</kd>
+                            <min_depth>0.001</min_depth>
+                        </ode>
+                    </contact>
+                </surface>
+            </collision>
+        </gazebo>
+
+        <!-- Wheel 3 -->
+        <gazebo reference="wheel3_link">
+            <visual>
+                <material>
+                    <ambient>0.5 0.5 0.5 1</ambient>
+                    <diffuse>0.5 0.5 0.5 1</diffuse>
+                    <specular>0.5 0.5 0.5 1</specular>
+                </material>
+            </visual>
+            <collision>
+                <surface>
+                    <friction>
+                        <ode>
+                            <mu>1.0</mu>
+                            <mu2>1.0</mu2>
+                        </ode>
+                    </friction>
+                    <contact>
+                        <ode>
+                            <kp>1000000.0</kp>
+                            <kd>100.0</kd>
+                            <min_depth>0.001</min_depth>
+                        </ode>
+                    </contact>
+                </surface>
+            </collision>
+        </gazebo>
+
+    </xacro:macro>
+
+</robot>

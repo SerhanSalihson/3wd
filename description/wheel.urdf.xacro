@@ -1,0 +1,62 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+    <xacro:property name="PI" value="3.1415926535897931"/>
+
+    <xacro:macro name="inertial_cylinder" params="mass length radius *origin">
+        <inertial>
+            <xacro:insert_block name="origin"/>
+            <mass value="${mass}" />
+            <inertia 
+                ixx="${(1/12) * mass * (3*radius*radius + length*length)}"
+                ixy="0.0"
+                ixz="0.0"
+                iyy="${(1/12) * mass * (3*radius*radius + length*length)}"
+                iyz="0.0"
+                izz="${(1/2) * mass * (radius*radius)}" />
+        </inertial>
+    </xacro:macro>
+
+    <xacro:macro name="wheel" params="parent suffix theta">
+        <joint name="wheel${suffix}_joint" type="continuous">
+            <origin xyz="${chassis_radius*cos(theta)} ${chassis_radius*sin(theta)} ${-chassis_height/2 - wheel_radius}" 
+                    rpy="0.0 ${PI/2} ${theta+PI}"/>
+            <parent link="${parent}"/>
+            <child link="wheel${suffix}_link"/>
+            <axis xyz="0.0 0.0 1.0"/>
+        </joint>
+
+        <link name="wheel${suffix}_link">
+            <visual>
+                <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+                <geometry>
+                    <cylinder radius="${wheel_radius}" length="${wheel_thickness}"/>
+                </geometry>
+                <material name="grey"/>
+            </visual>
+
+            <collision>
+                <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+                <geometry>
+                    <cylinder radius="${wheel_radius}" length="${wheel_thickness}"/>
+                </geometry>
+            </collision>
+
+            <inertial>
+                <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+                <mass value="0.113"/>
+                <inertia ixx="0.000089064"
+                         ixy="0.0"
+                         ixz="0.0"
+                         iyy="0.000089064"
+                         iyz="0.0"
+                         izz="0.000173339"/>
+            </inertial>
+        </link>
+
+        <gazebo reference="wheel${suffix}_link">
+            <material>Gazebo/Grey</material>
+            <mu1>0.1</mu1>
+            <mu2>0.1</mu2>
+        </gazebo>
+    </xacro:macro>
+</robot>
