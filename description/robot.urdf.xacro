@@ -1,7 +1,113 @@
 <?xml version="1.0"?>
-<robot xmlns:xacro="http://www.ros.org/wiki/xacro"  name="robot">
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="omni_robot">
 
-    <!-- Example link -->
-    <link name="base_link"></link>
+  <!-- Materials -->
+  <material name="blue">
+    <color rgba="0.0 0.0 0.8 1.0"/>
+  </material>
+  <material name="black">
+    <color rgba="0.1 0.1 0.1 1.0"/>
+  </material>
+
+  <!-- Base Link -->
+  <link name="base_link">
+    <visual>
+      <geometry>
+        <cylinder radius="0.2" length="0.1"/>
+      </geometry>
+      <material name="blue"/>
+    </visual>
+    <collision>
+      <geometry>
+        <cylinder radius="0.2" length="0.1"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="5.0"/>
+      <inertia ixx="0.054" ixy="0.0" ixz="0.0" iyy="0.054" iyz="0.0" izz="0.1"/>
+    </inertial>
+  </link>
+
+  <!-- Dummy footprint link -->
+  <link name="base_footprint"/>
+  <joint name="base_footprint_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="base_footprint"/>
+    <origin xyz="0 0 -0.10" rpy="0 0 0"/>
+  </joint>
+
+  <!-- Macro for omni wheels -->
+  <xacro:macro name="omni_wheel" params="name angle">
+    <link name="${name}_link">
+      <visual>
+        <geometry>
+          <sphere radius="0.05"/>
+        </geometry>
+        <material name="black"/>
+      </visual>
+      <collision>
+        <geometry>
+          <sphere radius="0.05"/>
+        </geometry>
+      </collision>
+      <inertial>
+        <mass value="0.5"/>
+        <inertia ixx="0.0005" ixy="0" ixz="0" iyy="0.0005" iyz="0" izz="0.0005"/>
+      </inertial>
+    </link>
+
+    <joint name="${name}_joint" type="continuous">
+      <parent link="base_link"/>
+      <child link="${name}_link"/>
+      <!-- Wheel offset is 0.2m from center, angle determines the position -->
+      <origin xyz="${0.2 * cos(angle)} ${0.2 * sin(angle)} -0.05" rpy="0 0 0"/>
+      <axis xyz="${-sin(angle)} ${cos(angle)} 0"/>
+    </joint>
+  </xacro:macro>
+
+  <!-- 3 Wheels at 120 degrees apart (0, 120, 240 or 0, 2pi/3, 4pi/3) -->
+  <xacro:omni_wheel name="wheel_1" angle="0"/>
+  <xacro:omni_wheel name="wheel_2" angle="${2*pi/3}"/>
+  <xacro:omni_wheel name="wheel_3" angle="${4*pi/3}"/>
+
+  <!-- Gazebo elements -->
+  <gazebo reference="base_link">
+    <material>Gazebo/Blue</material>
+  </gazebo>
+  <gazebo reference="wheel_1_link">
+    <material>Gazebo/Black</material>
+    <!-- low friction for omni behavior in simulation -->
+    <mu1>0.0</mu1>
+    <mu2>0.0</mu2>
+  </gazebo>
+  <gazebo reference="wheel_2_link">
+    <material>Gazebo/Black</material>
+    <mu1>0.0</mu1>
+    <mu2>0.0</mu2>
+  </gazebo>
+  <gazebo reference="wheel_3_link">
+    <material>Gazebo/Black</material>
+    <mu1>0.0</mu1>
+    <mu2>0.0</mu2>
+  </gazebo>
+
+  <!-- Planar move plugin for omni-directional control in Gazebo -->
+  <gazebo>
+    <plugin name="omni_steering" filename="libgazebo_ros_planar_move.so">
+      <ros>
+        <remapping>cmd_vel:=cmd_vel</remapping>
+        <remapping>odom:=odom</remapping>
+      </ros>
+      <update_rate>100.0</update_rate>
+      <publish_rate>10.0</publish_rate>
+      <publish_odom>true</publish_odom>
+      <publish_odom_tf>true</publish_odom_tf>
+      <odometry_frame>odom</odometry_frame>
+      <robot_base_frame>base_link</robot_base_frame>
+      <covariance_x>0.0001</covariance_x>
+      <covariance_y>0.0001</covariance_y>
+      <covariance_yaw>0.01</covariance_yaw>
+    </plugin>
+  </gazebo>
 
 </robot>
