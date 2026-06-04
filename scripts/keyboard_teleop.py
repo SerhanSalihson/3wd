@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
 import sys
-import threading
 import rclpy
 from rclpy.node import Node
 from geometry_msgs.msg import Twist
@@ -21,22 +20,15 @@ class KeyboardTeleop(Node):
         # Check if running in a proper terminal
         if not sys.stdin.isatty():
             self.get_logger().error(
-                '='*60 + '\n' +
-                'ERROR: Not running in a terminal!\n' +
-                'This node requires a TTY for keyboard input.\n\n' +
-                'Please run directly in a terminal:\n' +
-                '  ros2 run omni keyboard_teleop.py\n\n' +
-                'Or in a separate terminal window, not via launch file.\n' +
-                '='*60
+                'ERROR: Not running in a terminal! '
+                'Please run: ros2 run omni keyboard_teleop.py'
             )
             raise RuntimeError('Not running in a terminal (TTY required)')
         
-        # Publisher
-        self.publisher = self.create_publisher(
-            Twist, 
-            '/omni_wheel_controller/cmd_vel', 
-            10
-        )
+        # Simple Twist publisher
+        topic = '/omni_wheel_controller/cmd_vel_unstamped'
+        self.publisher = self.create_publisher(Twist, topic, 10)
+        self.get_logger().info(f'Publishing Twist to {topic}')
         
         # Movement parameters
         self.linear_speed = 0.3  # m/s
@@ -47,22 +39,75 @@ class KeyboardTeleop(Node):
         self.key_bindings = {
             'w': (1, 0, 0),   # Forward
             's': (-1, 0, 0),  # Backward
-            'a': (0, 1, 0),   # Left
-            'd': (0, -1, 0),  # Right
+            'a': (0, 1, 0),   # Left (strafe)
+            'd': (0, -1, 0),  # Right (strafe)
             'q': (0, 0, 1),   # Rotate counter-clockwise
             'e': (0, 0, -1),  # Rotate clockwise
-            # Diagonal movements
-            'r': (1, 1, 0),   # Forward-left
-            't': (1, -1, 0),  # Forward-right
-            'f': (-1, 1, 0),  # Backward-left
-            'g': (-1, -1, 0), # Backward-right
+            # Diagonal combinations (omnidirectional)
+            'r': (1, 1, 0),   # Forward-Left diagonal
+            't': (1, -1, 0),  # Forward-Right diagonal
+            'f': (-1, 1, 0),  # Backward-Left diagonal
+            'g': (-1, -1, 0), # Backward-Right diagonal
         }
         
-        self.get_logger().info('Keyboard Teleop Node Started!')
         self.print_instructions()
 
     def print_instructions(self):
         msg = """
+
+                                             irrrrrri
+                                    rrsAAXXAXr;
+                                   riXrA2sX3srir;
+                                X2irsArh5r5hrsrrXr;
+                             is2AAsissXsrssrriirXri
+                             sX3AsXrrXXrrssssriiii
+                              sA2AsisXAXX222Asririi
+                                rsAA2AXAXAAXsriAS3r
+                               irh#SSGA25XX2sXXA2Xi
+                                sXAAX5225s2AXXrrri               rX  s
+                                 rsssssXXsXssssr                s5h 2Xss
+                                      223352X                  Xr35iXsX2
+                                     ,irXAXsr;                 XAAsrX3M
+                         ,,::;:XHMGMHA;rsA2si:3MMh              rX2MHS
+                     ,,,:,,:;:iMSGGGHSMX3SG5XGSHSGHM5;;;::     XAr5
+                  ,,,,,,:;iiisH###SSSSSHGGGHGSS#SSSGGs;;:::;i;;sXrs:
+                ,,,,;;iirrrrXH###S#SS#SS#SSSSSSSSSSS#hiiiirAM2sXXXrrii
+               ,,;irrrssssA2H##SSS#####SS#SSS###S#GSSGsiirA3M5XXXXAAsi
+              ,,irssssA2223MSSS#SS#S#S########SSSSSGS#3riiirssssssssi;
+             ,,;rXAA23hh53MHGS###############SS#S#SSS#SAii;;rsXAA22As:,
+             ,,;rsXA533Xr  HGGSS###S##################BMr;rrsXsssssrs::
+             ::irsXA252i;  GHHSS###########9#9##9#99999BXrrrrsAA22Xsrr::
+             ::irsXAA5M5  hHHSS######9#9#99#9#9999999B#5:srX2AXXssXXsii
+             :;irsAA53MM  MMGSS########999999999BBBBBGsrssss5h2522AXsr
+             :;irXXA3MMM  HGSSS###9#9####999999B9BB9BhiMSAXsXAA5552
+            ,,;rsXXX5MMh  #GHS####99999999999BBBBB99ShAM3 X5h
+            ,.;irsXA5MHM  #SS#999999999999999999999#Gh52
+            :rXXXA25MHSG  999999999999999999999999#SGM5A
+            ;irirsA23HG   9999999999999############SHh5A
+            ,,::iXXXA2hM  99999999999999999#########Hh52
+           :,;;;sX5HG35M  B999999BBBBBB99BB99######SHh5A
+          A;irsrXAM#MhhH#SBB9BB9BBBBBBS  9999######SH35A
+          #HXsA525332hHMSSB&B&BBBBBBBS3   99#######SSh2A
+        hhMGGMMGGHMMhHGGSSB&&&&BBBBB#M5   99######SSG322
+3hHHHGSSSSSSSSSGGHSB99#SSS9BBBBBB&&B#H3   99########Sh2A
+MMMMMMHHGG#9#SSSS#9B&&9SS#9#####B&BB9Sh   99########SM5A
+ HSSSGGGGS####99##9#9&#SS9B99B9#B&BB9Gh   99########SM32
+ HSGGGGGSGS##99999S#B&#S##99####BBBB9Gh5  #9########SM35
+ SSSSSSSSSS#999999999B##9B9#99##BBBB9#Gh5 99########GMh
+ HHGGGGSSSS99999#999BB##9#99##99BBBB99SH3M999#######GMh
+ HHGGGGHGHGS##9999#9&9S#9999B99#BBBBB9SGHS99#######GHM3
+ HHGGGGHHHHS###9999BB9S#99999B99BBBB99#SHS99######SHMh5
+ HHGHHHHHHHS#999999999##9#######9BBBB#SGG##########SHh5
+    HHHHHHHGSS##99999#####999#S#9#Gh33MG #########GMMh2
+           HSSS###        #9BBBBB9SHMHG  ####9999#SHM32
+                          G#B&BBBB9#GH  ####999999#GGM2
+                                        ##99999#9999#G352
+                                        9BB99999999999#Hh
+                                         999999999999999S
+                                          BBBBBBBBBBB999
+
+
+        Made with no love whatsoever by Serhan S.
         ╔═══════════════════════════════════════╗
         ║   OMNI ROBOT KEYBOARD CONTROL         ║
         ╠═══════════════════════════════════════╣
@@ -137,12 +182,18 @@ class KeyboardTeleop(Node):
         twist.linear.y = y * self.linear_speed
         twist.angular.z = z * self.angular_speed
         self.publisher.publish(twist)
+        self.get_logger().info(f'Cmd: x={twist.linear.x:.2f}, y={twist.linear.y:.2f}, w={twist.angular.z:.2f}')
 
     def stop(self):
         """Stop the robot."""
+        if not self.context.ok():
+            return
         twist = Twist()
-        self.publisher.publish(twist)
-        self.get_logger().info('Robot stopped')
+        try:
+            self.publisher.publish(twist)
+            self.get_logger().info('STOP')
+        except Exception:
+            pass
 
     def run(self):
         """Main loop for keyboard control."""
@@ -164,14 +215,14 @@ class KeyboardTeleop(Node):
                     self.linear_speed += self.speed_increment
                     self.angular_speed += self.speed_increment * 0.5
                     self.get_logger().info(
-                        f'Speed increased - Linear: {self.linear_speed:.2f} m/s, '
+                        f'Speed UP - Linear: {self.linear_speed:.2f} m/s, '
                         f'Angular: {self.angular_speed:.2f} rad/s'
                     )
                 elif key == '-' or key == '_':
                     self.linear_speed = max(0.1, self.linear_speed - self.speed_increment)
                     self.angular_speed = max(0.1, self.angular_speed - self.speed_increment * 0.5)
                     self.get_logger().info(
-                        f'Speed decreased - Linear: {self.linear_speed:.2f} m/s, '
+                        f'Speed DOWN - Linear: {self.linear_speed:.2f} m/s, '
                         f'Angular: {self.angular_speed:.2f} rad/s'
                     )
                 
@@ -179,19 +230,6 @@ class KeyboardTeleop(Node):
                 elif key in self.key_bindings:
                     x, y, z = self.key_bindings[key]
                     self.publish_twist(x, y, z)
-                    direction = {
-                        'w': 'Forward', 's': 'Backward', 
-                        'a': 'Left', 'd': 'Right',
-                        'q': 'Rotate Left', 'e': 'Rotate Right',
-                        'r': 'Forward-Left', 't': 'Forward-Right',
-                        'f': 'Backward-Left', 'g': 'Backward-Right'
-                    }
-                    self.get_logger().info(f'Moving: {direction.get(key, "Unknown")}')
-                
-                # Unknown key
-                else:
-                    if key.isprintable():
-                        self.get_logger().warn(f'Unknown key: {key}')
         
         except Exception as e:
             self.get_logger().error(f'Error: {str(e)}')
@@ -202,21 +240,17 @@ class KeyboardTeleop(Node):
 
 def main(args=None):
     rclpy.init(args=args)
-    
     node = KeyboardTeleop()
-    
-    # Run in a separate thread to allow ROS to spin
-    teleop_thread = threading.Thread(target=node.run, daemon=True)
-    teleop_thread.start()
-    
+
     try:
-        rclpy.spin(node)
+        node.run()
     except KeyboardInterrupt:
         pass
     finally:
         node.stop()
         node.destroy_node()
-        rclpy.shutdown()
+        if rclpy.ok():
+            rclpy.shutdown()
 
 
 if __name__ == '__main__':

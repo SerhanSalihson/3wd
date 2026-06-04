@@ -15,6 +15,7 @@
 
     <xacro:include filename="$(find omni)/description/wheel.urdf.xacro"/>
     <xacro:include filename="$(find omni)/description/materials.urdf.xacro"/>
+    <xacro:include filename="$(find omni)/description/lidar.urdf.xacro"/>
     <xacro:include filename="$(find omni)/description/ros2_control.urdf.xacro"/>
     <xacro:include filename="$(find omni)/description/gazebo.urdf.xacro"/>
     
@@ -57,6 +58,9 @@
                         izz="0.005903752"/>
         </inertial>
     </link>
+
+    <!-- 2D lidar mounted above the chassis -->
+    <xacro:lidar_sensor parent="chassis_link" prefix="lidar"/>
 
     <!-- THREE OMNI WHEELS at 120° intervals -->
     <!-- Wheel 1: Rear (180 degrees) -->

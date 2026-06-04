@@ -5,7 +5,7 @@
         
         <!-- Gazebo (Ignition) plugin for ROS 2 Control -->
         <gazebo>
-            <plugin filename="gz_ros2_control-system" name="gz_ros2_control::GazeboSimROS2ControlPlugin">
+            <plugin filename="libgz_ros2_control-system.so" name="gz_ros2_control::GazeboSimROS2ControlPlugin">
                 <parameters>$(find omni)/config/omni_wheel_controller.yaml</parameters>
             </plugin>
         </gazebo>
@@ -59,6 +59,11 @@
             </collision>
         </gazebo>
 
+        <!-- Wheel 1 Motor Plugin -->
+        <gazebo reference="wheel1_joint">
+            <implicitSpringDamper>true</implicitSpringDamper>
+        </gazebo>
+
         <!-- Wheel 2 -->
         <gazebo reference="wheel2_link">
             <visual>
@@ -87,6 +92,11 @@
             </collision>
         </gazebo>
 
+        <!-- Wheel 2 Motor Plugin -->
+        <gazebo reference="wheel2_joint">
+            <implicitSpringDamper>true</implicitSpringDamper>
+        </gazebo>
+
         <!-- Wheel 3 -->
         <gazebo reference="wheel3_link">
             <visual>
@@ -113,6 +123,11 @@
                     </contact>
                 </surface>
             </collision>
+        </gazebo>
+
+        <!-- Wheel 3 Motor Plugin -->
+        <gazebo reference="wheel3_joint">
+            <implicitSpringDamper>true</implicitSpringDamper>
         </gazebo>
 
     </xacro:macro>

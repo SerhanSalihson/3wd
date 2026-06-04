@@ -33,7 +33,7 @@ if(BUILD_TESTING)
 endif()
 
 install(
-  DIRECTORY config description launch worlds
+  DIRECTORY config description launch rviz worlds
   DESTINATION share/${PROJECT_NAME}
 )
 
@@ -41,6 +41,7 @@ install(
   PROGRAMS 
     scripts/keyboard_teleop.py
     scripts/test_movement.py
+    scripts/gui_teleop.py
   DESTINATION lib/${PROJECT_NAME}
 )
 

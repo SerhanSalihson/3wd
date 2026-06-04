@@ -19,7 +19,7 @@ class RobotTester(Node):
         # Publisher for velocity commands
         self.cmd_pub = self.create_publisher(
             Twist,
-            '/omni_wheel_controller/cmd_vel',
+            '/omni_wheel_controller/cmd_vel_unstamped',
             10
         )
         

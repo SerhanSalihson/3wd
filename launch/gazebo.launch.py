@@ -1,8 +1,7 @@
 import os
 from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
-from launch.actions import IncludeLaunchDescription, ExecuteProcess, RegisterEventHandler, TimerAction
-from launch.event_handlers import OnProcessExit
+from launch.actions import IncludeLaunchDescription, TimerAction
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch_ros.actions import Node
 import xacro
@@ -15,6 +14,7 @@ def generate_launch_description():
     
     # Paths
     xacro_file = os.path.join(pkg_path, 'description', 'robot.urdf.xacro')
+    world_file = os.path.join(pkg_path, 'worlds', 'obstacles.sdf')
     
     # Process the URDF
     robot_description_config = xacro.process_file(
@@ -23,13 +23,13 @@ def generate_launch_description():
     )
     robot_description = {'robot_description': robot_description_config.toxml()}
 
-    # Gazebo Sim (Ignition) launch
+    # Gazebo Sim (Ignition) launch with GUI
     gazebo = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([
             os.path.join(get_package_share_directory('ros_gz_sim'), 'launch', 'gz_sim.launch.py')
         ]),
         launch_arguments={
-            'gz_args': '-r empty.sdf'
+            'gz_args': f'-r {world_file}'
         }.items()
     )
 
@@ -47,8 +47,8 @@ def generate_launch_description():
         executable='create',
         arguments=['-topic', 'robot_description',
                    '-name', 'omni_robot',
-                   '-x', '0.0',
-                   '-y', '0.0',
+                   '-x', '-1.35',
+                   '-y', '0.35',
                    '-z', '0.1'],
         output='screen'
     )
@@ -61,36 +61,63 @@ def generate_launch_description():
         output='screen'
     )
 
-    # Joint State Broadcaster (delayed to allow controllers to load)
+    scan_bridge = Node(
+        package='ros_gz_bridge',
+        executable='parameter_bridge',
+        arguments=['/scan@sensor_msgs/msg/LaserScan[gz.msgs.LaserScan'],
+        output='screen'
+    )
+
+    scan_frame_tf = Node(
+        package='tf2_ros',
+        executable='static_transform_publisher',
+        arguments=[
+            '0', '0', '0.108',
+            '0', '0', '0',
+            'base_link',
+            'omni_robot/base_link/lidar',
+        ],
+        output='screen',
+    )
+
     joint_state_broadcaster_spawner = TimerAction(
         period=3.0,
         actions=[
             Node(
                 package='controller_manager',
                 executable='spawner',
-                arguments=['joint_state_broadcaster', '--controller-manager', '/controller_manager'],
-                output='screen'
+                arguments=[
+                    'joint_state_broadcaster',
+                    '--controller-manager',
+                    '/controller_manager',
+                ],
+                output='screen',
             )
-        ]
+        ],
     )
 
-    # Omni Wheel Controller (delayed further)
     omni_controller_spawner = TimerAction(
         period=5.0,
         actions=[
             Node(
                 package='controller_manager',
                 executable='spawner',
-                arguments=['omni_wheel_controller', '--controller-manager', '/controller_manager'],
-                output='screen'
+                arguments=[
+                    'omni_wheel_controller',
+                    '--controller-manager',
+                    '/controller_manager',
+                ],
+                output='screen',
             )
-        ]
+        ],
     )
 
     return LaunchDescription([
         gazebo,
         robot_state_publisher,
         clock_bridge,
+        scan_bridge,
+        scan_frame_tf,
         spawn_entity,
         joint_state_broadcaster_spawner,
         omni_controller_spawner,

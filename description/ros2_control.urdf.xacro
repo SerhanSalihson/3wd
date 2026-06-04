@@ -7,9 +7,11 @@
                 <xacro:if value="${use_sim}">
                     <plugin>gz_ros2_control/GazeboSimSystem</plugin>
                 </xacro:if>
-                <xacro:if value="${use_fake_hardware}">
-                    <plugin>mock_components/GenericSystem</plugin>
-                </xacro:if>
+                <xacro:unless value="${use_sim}">
+                    <xacro:if value="${use_fake_hardware}">
+                        <plugin>mock_components/GenericSystem</plugin>
+                    </xacro:if>
+                </xacro:unless>
             </hardware>
             
             <!-- Wheel 1 - Rear -->
