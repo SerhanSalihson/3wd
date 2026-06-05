@@ -2,9 +2,8 @@ import os
 
 from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
-from launch.actions import IncludeLaunchDescription, LogInfo, TimerAction
+from launch.actions import ExecuteProcess, IncludeLaunchDescription, LogInfo, TimerAction
 from launch.launch_description_sources import PythonLaunchDescriptionSource
-from launch_ros.actions import Node
 
 
 def generate_launch_description():
@@ -31,7 +30,7 @@ def generate_launch_description():
     )
 
     navigation = TimerAction(
-        period=10.0,
+        period=12.0,
         actions=[
             IncludeLaunchDescription(
                 PythonLaunchDescriptionSource(navigation_launch)
@@ -39,18 +38,19 @@ def generate_launch_description():
         ],
     )
 
-    rviz = TimerAction(
-        period=2.0,
-        actions=[
-            Node(
-                package='rviz2',
-                executable='rviz2',
-                name='rviz2',
-                arguments=['-d', rviz_config],
-                parameters=[{'use_sim_time': True}],
-                output='screen',
-            )
+    rviz = ExecuteProcess(
+        cmd=[
+            "bash",
+            "-c",
+            "until timeout 5 ros2 topic echo /map --once "
+            "--qos-durability transient_local >/dev/null 2>&1; do "
+            "sleep 0.2; done; "
+            "exec ros2 run rviz2 rviz2 -d \"$1\" "
+            "--ros-args -p use_sim_time:=true",
+            "bash",
+            rviz_config,
         ],
+        output="screen",
     )
 
 
