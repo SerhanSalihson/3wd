@@ -12,6 +12,7 @@ def generate_launch_description():
     gazebo_launch = os.path.join(pkg_path, 'launch', 'gazebo.launch.py')
     rviz_config = os.path.join(pkg_path, 'rviz', 'omni_quickstart.rviz')
     slam_launch = os.path.join(pkg_path, 'launch', 'slam.launch.py')
+    navigation_launch = os.path.join(pkg_path, 'launch', 'navigation.launch.py')
 
     gazebo = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(gazebo_launch)
@@ -22,6 +23,15 @@ def generate_launch_description():
         actions=[
             IncludeLaunchDescription(
                 PythonLaunchDescriptionSource(slam_launch)
+            )
+        ],
+    )
+
+    navigation = TimerAction(
+        period=10.0,
+        actions=[
+            IncludeLaunchDescription(
+                PythonLaunchDescriptionSource(navigation_launch)
             )
         ],
     )
@@ -40,27 +50,15 @@ def generate_launch_description():
         ],
     )
 
-    teleop = TimerAction(
-        period=7.0,
-        actions=[
-            Node(
-                package='omni',
-                executable='keyboard_teleop.py',
-                name='keyboard_teleop',
-                prefix='xterm -fa Monospace -fs 12 -T "Omni Teleop" -e',
-                output='screen',
-            )
-        ],
-    )
 
     return LaunchDescription([
         LogInfo(msg=[
             '\n',
-            'Starting Omni quickstart: Gazebo + RViz + SLAM Toolbox + keyboard teleop\n',
-            'Teleop opens in an xterm window. Use W/A/S/D, Q/E, SPACE, ESC.\n',
+            'Starting Omni navigation: Gazebo + SLAM Toolbox + Nav2 + RViz\n',
+            'Use the Nav2 Goal tool in RViz to click and drag a destination.\n',
         ]),
         gazebo,
         slam,
+        navigation,
         rviz,
-        teleop,
     ])

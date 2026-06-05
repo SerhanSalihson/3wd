@@ -22,6 +22,8 @@ omni_wheel_controller:
     # wheel2: -60° (-π/3 rad) - front right  
     # wheel3: 60° (π/3 rad) - front left
     omni_wheel_angle: [3.14159, -1.0472, 1.0472]
+    # Joint axes are opposite the controller's default wheel convention.
+    omni_wheel_direction: [-1.0, -1.0, -1.0]
     
     # Robot dimensions
     omni_wheel_distance: 0.085  # Distance from center to wheel (chassis_radius)
