@@ -2,11 +2,20 @@ import os
 
 from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
-from launch.actions import ExecuteProcess, IncludeLaunchDescription, LogInfo, TimerAction
+from launch.actions import (
+    DeclareLaunchArgument,
+    ExecuteProcess,
+    IncludeLaunchDescription,
+    LogInfo,
+    TimerAction,
+)
+from launch.conditions import IfCondition
 from launch.launch_description_sources import PythonLaunchDescriptionSource
+from launch.substitutions import LaunchConfiguration
 
 
 def generate_launch_description():
+    navigation_enabled = LaunchConfiguration("navigation")
     pkg_path = get_package_share_directory('omni')
     gazebo_launch = os.path.join(pkg_path, 'launch', 'gazebo.launch.py')
     rviz_config = os.path.join(pkg_path, 'rviz', 'omni_quickstart.rviz')
@@ -31,6 +40,7 @@ def generate_launch_description():
 
     navigation = TimerAction(
         period=12.0,
+        condition=IfCondition(navigation_enabled),
         actions=[
             IncludeLaunchDescription(
                 PythonLaunchDescriptionSource(navigation_launch)
@@ -55,11 +65,16 @@ def generate_launch_description():
 
 
     return LaunchDescription([
+        DeclareLaunchArgument(
+            "navigation",
+            default_value="true",
+            description="Start Nav2. Set false for SLAM-only mapping mode.",
+        ),
         LogInfo(msg=[
             '\n',
             splash,
-            'Starting Omni navigation: Gazebo + SLAM Toolbox + Nav2 + RViz\n',
-            'Use the Nav2 Goal tool in RViz to click and drag a destination.\n',
+            'Starting Omni: Gazebo + SLAM Toolbox + RViz\n',
+            'Navigation mode: use the Nav2 Goal tool. Mapping mode: drive manually.\n',
         ]),
         gazebo,
         slam,
