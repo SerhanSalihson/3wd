@@ -14,8 +14,6 @@ Panels:
     Expanded:
       - /Current View1
     Name: Views
-  - Class: nav2_rviz_plugins/Navigation 2
-    Name: Navigation 2
 Visualization Manager:
   Class: ""
   Displays:
