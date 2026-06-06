@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
 
 """
-Simple test script to verify the omni robot responds to velocity commands.
-This sends a series of test movements and monitors the response.
+Codebase of doom and despair.
 """
 
 import rclpy
