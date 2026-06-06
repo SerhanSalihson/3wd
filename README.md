@@ -23,6 +23,7 @@ updating the map.
 cd ~/omni
 ./quick_launch.sh
 ```
+There is also a quick quicklauncher if you are feeling lazy.
 
 Choose **Navigation** for Gazebo, SLAM, Nav2, and RViz. Choose **SLAM Mapping**
 for Gazebo, SLAM, and RViz without starting Nav2.
