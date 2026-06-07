@@ -1,0 +1,8 @@
+<library path="omni_rviz_panel">
+  <class
+    name="omni/Auto Mapping"
+    type="omni::AutoMappingPanel"
+    base_class_type="rviz_common::Panel">
+    <description>Start and stop autonomous frontier mapping from RViz.</description>
+  </class>
+</library>

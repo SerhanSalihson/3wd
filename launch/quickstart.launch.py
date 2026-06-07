@@ -6,7 +6,6 @@ from launch.actions import (
     DeclareLaunchArgument,
     ExecuteProcess,
     IncludeLaunchDescription,
-    LogInfo,
     TimerAction,
 )
 from launch.conditions import IfCondition
@@ -21,9 +20,6 @@ def generate_launch_description():
     rviz_config = os.path.join(pkg_path, 'rviz', 'omni_quickstart.rviz')
     slam_launch = os.path.join(pkg_path, 'launch', 'slam.launch.py')
     navigation_launch = os.path.join(pkg_path, 'launch', 'navigation.launch.py')
-    art_path = os.path.join(pkg_path, 'config', 'ride_the_lightning.txt')
-    with open(art_path, encoding='ascii') as art_file:
-        splash = art_file.read()
 
     gazebo = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(gazebo_launch)
@@ -70,12 +66,6 @@ def generate_launch_description():
             default_value="true",
             description="Start Nav2. Set false for SLAM-only mapping mode.",
         ),
-        LogInfo(msg=[
-            '\n',
-            splash,
-            'Starting Omni: Gazebo + SLAM Toolbox + RViz\n',
-            'Navigation mode: use the Nav2 Goal tool. Mapping mode: drive manually.\n',
-        ]),
         gazebo,
         slam,
         navigation,

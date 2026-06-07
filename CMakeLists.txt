@@ -17,9 +17,39 @@ endif()
 
 # find dependencies
 find_package(ament_cmake REQUIRED)
+find_package(ament_index_cpp REQUIRED)
+find_package(pluginlib REQUIRED)
+find_package(rviz_common REQUIRED)
+find_package(Qt5 REQUIRED COMPONENTS Widgets)
+
+set(CMAKE_AUTOMOC ON)
 # uncomment the following section in order to fill in
 # further dependencies manually.
 # find_package(<dependency> REQUIRED)
+
+add_library(omni_rviz_panel SHARED
+  src/auto_mapping_panel.cpp
+  include/omni/auto_mapping_panel.hpp
+)
+target_include_directories(omni_rviz_panel PUBLIC
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+  $<INSTALL_INTERFACE:include>
+)
+ament_target_dependencies(omni_rviz_panel ament_index_cpp pluginlib rviz_common)
+target_link_libraries(omni_rviz_panel Qt5::Widgets)
+pluginlib_export_plugin_description_file(rviz_common rviz_plugins.xml)
+
+install(
+  TARGETS omni_rviz_panel
+  ARCHIVE DESTINATION lib
+  LIBRARY DESTINATION lib
+  RUNTIME DESTINATION bin
+)
+
+install(
+  DIRECTORY include/
+  DESTINATION include
+)
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
@@ -42,6 +72,7 @@ install(
     scripts/keyboard_teleop.py
     scripts/test_movement.py
     scripts/gui_teleop.py
+    scripts/auto_mapper.py
   DESTINATION lib/${PROJECT_NAME}
 )
 

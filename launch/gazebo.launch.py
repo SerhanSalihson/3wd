@@ -72,10 +72,14 @@ def generate_launch_description():
         package='tf2_ros',
         executable='static_transform_publisher',
         arguments=[
-            '0', '0', '0.108',
-            '0', '0', '0',
-            'base_link',
-            'omni_robot/base_link/lidar',
+            '--x', '0',
+            '--y', '0',
+            '--z', '0.108',
+            '--roll', '0',
+            '--pitch', '0',
+            '--yaw', '0',
+            '--frame-id', 'base_link',
+            '--child-frame-id', 'omni_robot/base_link/lidar',
         ],
         output='screen',
     )

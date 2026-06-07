@@ -45,7 +45,8 @@
                     <friction>
                         <ode>
                             <mu>1.0</mu>
-                            <mu2>1.0</mu2>
+                            <mu2>0.001</mu2>
+                            <fdir1>0 1 0</fdir1>
                         </ode>
                     </friction>
                     <contact>
@@ -78,7 +79,8 @@
                     <friction>
                         <ode>
                             <mu>1.0</mu>
-                            <mu2>1.0</mu2>
+                            <mu2>0.001</mu2>
+                            <fdir1>0 1 0</fdir1>
                         </ode>
                     </friction>
                     <contact>
@@ -111,7 +113,8 @@
                     <friction>
                         <ode>
                             <mu>1.0</mu>
-                            <mu2>1.0</mu2>
+                            <mu2>0.001</mu2>
+                            <fdir1>0 1 0</fdir1>
                         </ode>
                     </friction>
                     <contact>

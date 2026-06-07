@@ -35,7 +35,7 @@
             <sensor name="${prefix}" type="gpu_lidar">
                 <pose>0 0 0 0 0 0</pose>
                 <topic>/scan</topic>
-                <update_rate>10</update_rate>
+                <update_rate>20</update_rate>
                 <always_on>true</always_on>
                 <visualize>true</visualize>
                 <lidar>

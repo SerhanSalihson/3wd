@@ -54,93 +54,23 @@ class KeyboardTeleop(Node):
 
     def print_instructions(self):
         msg = """
+OMNI ROBOT KEYBOARD CONTROL
 
-                                             irrrrrri
-                                    rrsAAXXAXr;
-                                   riXrA2sX3srir;
-                                X2irsArh5r5hrsrrXr;
-                             is2AAsissXsrssrriirXri
-                             sX3AsXrrXXrrssssriiii
-                              sA2AsisXAXX222Asririi
-                                rsAA2AXAXAAXsriAS3r
-                               irh#SSGA25XX2sXXA2Xi
-                                sXAAX5225s2AXXrrri               rX  s
-                                 rsssssXXsXssssr                s5h 2Xss
-                                      223352X                  Xr35iXsX2
-                                     ,irXAXsr;                 XAAsrX3M
-                         ,,::;:XHMGMHA;rsA2si:3MMh              rX2MHS
-                     ,,,:,,:;:iMSGGGHSMX3SG5XGSHSGHM5;;;::     XAr5
-                  ,,,,,,:;iiisH###SSSSSHGGGHGSS#SSSGGs;;:::;i;;sXrs:
-                ,,,,;;iirrrrXH###S#SS#SS#SSSSSSSSSSS#hiiiirAM2sXXXrrii
-               ,,;irrrssssA2H##SSS#####SS#SSS###S#GSSGsiirA3M5XXXXAAsi
-              ,,irssssA2223MSSS#SS#S#S########SSSSSGS#3riiirssssssssi;
-             ,,;rXAA23hh53MHGS###############SS#S#SSS#SAii;;rsXAA22As:,
-             ,,;rsXA533Xr  HGGSS###S##################BMr;rrsXsssssrs::
-             ::irsXA252i;  GHHSS###########9#9##9#99999BXrrrrsAA22Xsrr::
-             ::irsXAA5M5  hHHSS######9#9#99#9#9999999B#5:srX2AXXssXXsii
-             :;irsAA53MM  MMGSS########999999999BBBBBGsrssss5h2522AXsr
-             :;irXXA3MMM  HGSSS###9#9####999999B9BB9BhiMSAXsXAA5552
-            ,,;rsXXX5MMh  #GHS####99999999999BBBBB99ShAM3 X5h
-            ,.;irsXA5MHM  #SS#999999999999999999999#Gh52
-            :rXXXA25MHSG  999999999999999999999999#SGM5A
-            ;irirsA23HG   9999999999999############SHh5A
-            ,,::iXXXA2hM  99999999999999999#########Hh52
-           :,;;;sX5HG35M  B999999BBBBBB99BB99######SHh5A
-          A;irsrXAM#MhhH#SBB9BB9BBBBBBS  9999######SH35A
-          #HXsA525332hHMSSB&B&BBBBBBBS3   99#######SSh2A
-        hhMGGMMGGHMMhHGGSSB&&&&BBBBB#M5   99######SSG322
-3hHHHGSSSSSSSSSGGHSB99#SSS9BBBBBB&&B#H3   99########Sh2A
-MMMMMMHHGG#9#SSSS#9B&&9SS#9#####B&BB9Sh   99########SM5A
- HSSSGGGGS####99##9#9&#SS9B99B9#B&BB9Gh   99########SM32
- HSGGGGGSGS##99999S#B&#S##99####BBBB9Gh5  #9########SM35
- SSSSSSSSSS#999999999B##9B9#99##BBBB9#Gh5 99########GMh
- HHGGGGSSSS99999#999BB##9#99##99BBBB99SH3M999#######GMh
- HHGGGGHGHGS##9999#9&9S#9999B99#BBBBB9SGHS99#######GHM3
- HHGGGGHHHHS###9999BB9S#99999B99BBBB99#SHS99######SHMh5
- HHGHHHHHHHS#999999999##9#######9BBBB#SGG##########SHh5
-    HHHHHHHGSS##99999#####999#S#9#Gh33MG #########GMMh2
-           HSSS###        #9BBBBB9SHMHG  ####9999#SHM32
-                          G#B&BBBB9#GH  ####999999#GGM2
-                                        ##99999#9999#G352
-                                        9BB99999999999#Hh
-                                         999999999999999S
-                                          BBBBBBBBBBB999
+Movement:
+  W/S: forward/backward
+  A/D: strafe left/right
+  Q/E: rotate left/right
 
+Diagonals:
+  R/T: forward-left / forward-right
+  F/G: backward-left / backward-right
 
-        Made with no love whatsoever by Serhan S.
-        ╔═══════════════════════════════════════╗
-        ║   OMNI ROBOT KEYBOARD CONTROL         ║
-        ╠═══════════════════════════════════════╣
-        ║                                       ║
-        ║   Movement Controls:                  ║
-        ║   ─────────────────                   ║
-        ║      W : Forward                      ║
-        ║      S : Backward                     ║
-        ║      A : Strafe Left                  ║
-        ║      D : Strafe Right                 ║
-        ║      Q : Rotate Left (CCW)            ║
-        ║      E : Rotate Right (CW)            ║
-        ║                                       ║
-        ║   Diagonal Movement:                  ║
-        ║   ─────────────────                   ║
-        ║      R : Forward-Left                 ║
-        ║      T : Forward-Right                ║
-        ║      F : Backward-Left                ║
-        ║      G : Backward-Right               ║
-        ║                                       ║
-        ║   Speed Control:                      ║
-        ║   ─────────────                       ║
-        ║      + : Increase speed               ║
-        ║      - : Decrease speed               ║
-        ║                                       ║
-        ║   Other:                              ║
-        ║   ─────                               ║
-        ║   SPACE : Stop                        ║
-        ║   ESC/Ctrl+C : Quit                   ║
-        ║                                       ║
-        ╚═══════════════════════════════════════╝
-        
-        Current Speed - Linear: {:.2f} m/s, Angular: {:.2f} rad/s
+Other:
+  +/-: adjust speed
+  SPACE: stop
+  ESC or Ctrl+C: quit
+
+Current speed - linear: {:.2f} m/s, angular: {:.2f} rad/s
         """.format(self.linear_speed, self.angular_speed)
         print(msg)
 
