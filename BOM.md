@@ -9,6 +9,67 @@ The diagram that inspired this list shows more brushed motors than a normal
 12-DOF build. This BOM deliberately uses **4 RO80 + 8 brushed motors = 12
 joints**.
 
+## Selected purchase list
+
+This is the short shopping list. Links point to actual product pages rather
+than manufacturer home pages. Stock and prices were checked on 2026-09-04 but
+can change. Quantities include the stated spares.
+
+### Order now
+
+| Qty | Selected part | Direct purchase link | Purpose / note |
+| ---: | --- | --- | --- |
+| 1 | Blue Sea 5191 MRBF terminal fuse block | [Dünya Marine](https://dunyamarine.com.tr/urun/blue-sea-systems-mrbf-tekli-terminal-sigorta-blogu-5191-1465191) | Covered main-battery fuse holder, 58 VDC |
+| 2 | Blue Sea 5183 MRBF 100 A / 58 V fuse | [Artı Marin](https://www.artimarin.com.tr/blue-sea-terminal-sigorta-100a-5183-bss-2009) | One installed and one spare; use only after the old pack leads pass inspection and thermal testing |
+| 1 | TE EV200AAANA sealed DC contactor | [Saral Elektrik](https://saralelektrik.com/urun/ev200aaana-kontaktor) | Main motion-bus contactor; 9–36 V coil |
+| 1 | Schneider XB5AS8442 latching E-stop | [Schneider Türkiye](https://eshop.se.com/tr/harmony-xb5-kirmizi-o40-acil-durdurma-butonu-o22-mandallama-dondurulerek-serbest-birakilan-1nk-xb5as8442.html) | Hard-wired contactor shutdown |
+| 1 | Schneider ZBE102 NC contact block | [Farnell Türkiye](https://tr.farnell.com/schneider-electric/zbe102/contact-block-1nc-screw/dp/3053003) | Second NC channel for the safety controller |
+| 1 | EV Power REL-PRECHG180 precharge controller | [EV Power](https://www.ev-power.com.au/product/rel-prechg180/) | Prevents the contactor closing into uncharged controller capacitors |
+| 2 | Victron 150 A / 70 V, 6-position covered busbar | [ANFORA](https://www.yatmalzemeleri.com/urun/busbar-cover-1) | One positive and one negative 48 V busbar |
+| 5 | Covered MIDI fuse holder | [ANFORA](https://www.yatmalzemeleri.com/urun/midi-fuse-holder) | Four XDrive feeds and one converter feed |
+| 6 | 40 A / 58 V MIDI fuse | [ANFORA](https://www.yatmalzemeleri.com/urun/midi-fuse-40a-58v) | Four installed on XDrives plus two spares; do not use a 32 V-only fuse on the 12S bus |
+| 2 | Blue Sea 5025 six-circuit fuse block | [Dünya Marine](https://dunyamarine.com.tr/urun/blue-sea-systems-st-blade-6li-sigorta-blogu-5025-1465406) | Four brushed-motor drivers per block; includes negative bus |
+| 12 | 15 A standard ATO/ATC fuse | [Hızlı Diyot](https://www.hizlidiyot.com/15a-otomotiv-bicak-sigorta---standart-u1190) | Eight installed and four spares |
+| 10 | BTS7960B / IBT-2 single-motor H-bridge | [Robolink Market](https://robolinkmarket.com/bts7960b-43a-motor-surucu-karti) | Eight installed and two spares; one board per brushed motor; commission at 10 A and prove thermals before increasing |
+| 1 pair | 150 A covered red/black busbars | [Obus Karavan](https://www.obuskaravan.com/urun/12v-24v-48v-150a-bara-takimi-maximum-voltage-48v-dc-rated-current-150a-dc-2424) | 12 V positive and negative distribution |
+| 1 | Victron Orion-Tr 48/12-20A, 240 W | [MarinReyon](https://www.marinreyon.com/urun/victron-energy-orion-tr-48-12-20a-240w-ori481224110) | Clean 12 V rail for Jetson, contactor/precharge and low-power auxiliaries; not for the eight brushed motors |
+| 1 | Mean Well RSD-30L-5, 5 V / 6 A | [TME Türkiye](https://www.tme.eu/tr/details/rsd-30l-5/dc-dc-donusturuculer/mean-well/) | 5 V rail for controllers and sensors |
+| 4 | ST NUCLEO-G474RE | [Robiz](https://robiz.net/nucleog474re?tag=2G) | One leg controller per leg |
+| 5 | SN65HVD230 CAN transceiver module | [F1 Depo](https://www.f1depo.com/urun/sn65hvd230-can-modulu) | Four Nucleo transceivers plus one for Jetson native CAN |
+| 8 | Genuine AS5047P adapter board | [Mouser Türkiye](https://www.mouser.com.tr/ProductDetail/ams-OSRAM/AS5047P-TS_EK_AB?qs=Rt6VE0PE%2FOfJKFTMKo%252BL0Q%3D%3D) | Absolute encoder for each brushed joint; also order the specified diametric magnets |
+
+Buy cable by the measured metre after routing the CAD. Start with
+[25 mm² red](https://www.voltaj.net/si-af-25-mm-isiya-dayanikli-silikon-bakir-cok-telli-tek-damarli-kablo-1m-kirmizi-pmu4121)
+and [black](https://www.voltaj.net/si-af-25-mm-isiya-dayanikli-silikon-bakir-cok-telli-tek-damarli-kablo-1m-siyah-pmu4120)
+for the main paths, [10 mm² red](https://www.voltaj.net/si-af-10-mm-isiya-dayanikli-silikon-bakir-cok-telli-tek-damarli-kablo-1m-kirmizi-pmu4117)
+and [black](https://www.voltaj.net/siaf-10-mm-isiya-dayanikli-silikon-bakir-cok-telli-tek-damarli-kablo-1m-siyah-pmu4116)
+for converter feeds, [6 mm² red](https://www.voltaj.net/si-af-6-mm-isiya-dayanikli-silikon-bakir-cok-telli-tek-damarli-kablo-1m-kirmizi-pmu4115)
+and [black](https://www.voltaj.net/si-af-6-mm-isiya-dayanikli-silikon-bakir-cok-telli-tek-damarli-kablo-1m-siyah-pmu4114)
+for XDrive branches, and [2.5 mm² red](https://www.voltaj.net/si-af-25-mm-isiya-dayanikli-silikon-bakir-cok-telli-tek-damarli-kablo-1m-kirmizi-pmu4111)
+and [black](https://www.voltaj.net/si-af-25-mm-isiya-dayanikli-silikon-bakir-cok-telli-tek-damarli-kablo-1m-siyah-pmu4110)
+for brushed-motor branches. Verify the conductor cross-section on delivery and
+use crimp lugs matched to both the conductor and stud.
+
+### Hold — do not order yet
+
+| Qty | Candidate | Link | What must be resolved first |
+| ---: | --- | --- | --- |
+| 2 | Victron Orion 48/12-60A, one separate 12 V bus per four motors | [Available EU listing](https://green-future.at/?a=3563&lang=eng) | Measure one motor's running, startup and locked-rotor current. This converter is not regenerative, so also prove that the 12 V bus cannot rise during braking/reversal before buying. |
+| 1 | JK Smart 8S–24S 200 A BMS | [Alphada](https://www.alphada.com.tr/jk-smart-8s-24s-200a-bluetooth-akilli-bms) | Buy only if the two RC packs are being rebuilt as one permanent 12S pack by someone qualified to rework both balance/sense harnesses. |
+
+### Reuse; do not buy again
+
+| Qty | Item |
+| ---: | --- |
+| 2 | Existing Komponentci 6S 22.2 V, 8 Ah LiPos wired in series |
+| 4 | CubeMars RO80 motors |
+| 4 | MKS XDrive Mini controllers and their supplied brake resistors |
+| 1 | Jetson Orin Nano Super developer kit |
+
+There are deliberately no fans, XT60 operating connectors, separate XDrive
+brake resistors, Cytron XDD/MDDS30 boards, or PMU59726 one-direction speed
+controllers in this order.
+
 ## Design basis
 
 | Load | Quantity | Planning value |
@@ -16,7 +77,7 @@ joints**.
 | CubeMars RO80 | 4 | 48 V, about 490 W rated each |
 | MKS XDrive Mini | 4 | One controller per RO80 |
 | Brushed geared motor | 8 | 12 V, 10 A nominal and non-backdriveable; stall current still must be measured |
-| Jetson Orin Nano Super developer kit | 1 | 19 V barrel input; 25 W Super power mode |
+| Jetson Orin Nano Super developer kit | 1 | 9–20 V DC-jack input; 25 W Super power mode |
 | Existing LiPo | 2 | [Komponentci RB-267](https://www.komponentci.net/222v-li-po-pil-8000mah-100c-6s-lityum-polymer-batarya-pmu12014): 6S, 22.2 V, 8 Ah each; series pair is 12S, 44.4 V nominal, 50.4 V full, 8 Ah |
 
 The nominal loads total about 3.0 kW. That is roughly 68 A from a 44.4 V pack
@@ -33,7 +94,7 @@ the pack leads and replacement terminations pass inspection and a thermal test.
   +-> protected always-on low-power rails
   |    +-> battery monitor/BMS
   |    +-> 12 V safety rail -> precharge controller + contactor coil
-  |    +-> 19 V rail -> Jetson Orin Nano Super
+  |    +-> regulated 12 V rail -> Jetson Orin Nano Super
   |    `-> 5 V rail -> STM32 boards and sensors
   `-> precharge circuit -> normally-open main contactor -> 48 V motion bus
        +-> 4 x 40 A fused MKS XDrive Mini -> 4 x RO80
@@ -156,18 +217,17 @@ commands, current limits, and fault behavior is a procurement gate.
 
 | Qty | Buy | Selected specification / example | Notes |
 | ---: | --- | --- | --- |
-| 1 | Jetson supply | [Victron Orion-Tr 48/24-5 Isolated](https://www.victronenergy.com/upload/documents/Datasheet-Orion-Tr-DC-DC-converters-isolated-100-250-400W-EN.pdf), 32–70 V input, adjustable 18–30 V output | Set and meter-check **19.0 V before connecting** the Jetson barrel jack |
+| 1 | Jetson supply | [Victron Orion-Tr 48/12-20A](https://www.marinreyon.com/urun/victron-energy-orion-tr-48-12-20a-240w-ori481224110), 32–70 V input, adjustable 10–15 V output | Set and meter-check **12.0 V before connecting** the Jetson DC jack |
 | 1 | Jetson power lead | Correct center-positive barrel plug, locking/strain-relieved at the robot harness | Add a 4 A output fuse; verify polarity twice |
 | 1 | Logic converter | Mean Well RSD-30L-5, 18–72 V input, 5 V / 6 A output | Powers leg controllers and sensors, not motors |
 | 4 | Leg controller | STM32 NUCLEO-G474RE or a derived protected board | One per leg: reads two brushed-joint encoders and commands two BTS7960B modules |
-| 4 | CAN transceiver | 3.3 V high-speed CAN module based on SN65HVD230 or equivalent | Nucleo MCU has the controller but still needs a physical-layer transceiver |
-| 1 | Jetson CAN adapter | Isolated USB-to-CAN adapter such as CANable Pro | Connects Jetson control software to the robot CAN trunk |
+| 5 | CAN transceiver | [SN65HVD230 module](https://www.f1depo.com/urun/sn65hvd230-can-modulu), 3.3 V high-speed CAN physical layer | Four for Nucleo boards and one for the Jetson native CAN controller |
 | 1 | Powered USB hub, optional | 19 V/5 V-compatible, locking power input | Only if cameras and other USB devices exceed Jetson port budget |
 | As needed | Sensors | IMU, foot/contact sensors, limit/reference switches | Choose electrical interfaces before final harness manufacture |
 
-NVIDIA specifies a 19 V barrel input for the developer kit, so the Jetson does
-not share the high-current 12 V motor rail. The isolated converter also reduces
-motor-noise coupling into the computer.
+NVIDIA specifies a 9–20 V DC-jack input range for the developer kit. The Jetson
+therefore uses its own regulated 12 V converter and does not share either of the
+high-current brushed-motor buses.
 
 ## F. Cable, terminals, and mechanical electrical hardware
 
@@ -213,7 +273,7 @@ Every fuse must protect the smallest downstream conductor.
    battery hard gate.
 2. Assemble and insulation-test the fuse, service disconnect, precharge, and
    contactor section with no controllers attached.
-3. Set the Jetson converter to 19.0 V and verify the 12 V and 5 V rails with
+3. Set the Jetson converter to 12.0 V and verify both 12 V motor buses and the 5 V rail with
    dummy loads before connecting electronics.
 4. Bring up one XDrive/RO80 at low current. Verify encoder direction, motor
    direction, CAN ID, brake-resistor action, E-stop, and contactor opening.
